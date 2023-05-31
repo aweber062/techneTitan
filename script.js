@@ -42,8 +42,8 @@ $(document).ready(function () {
         // check the rateLimit
         rateCnt = parseInt(sessionStorage.getItem('rateCnt'));
         if (rateCnt >= rateLimit) {
-            let PIN = prompt('Rate Limit Exceeded. Please enter the PIN to reset the session:  ');
-            if (PIN === '5912') {
+            let userPIN = prompt('Rate Limit Exceeded. Please enter the PIN to reset the session:  ');
+            if (userPIN === PIN) {
                 // reset
                 sessionStorage.setItem('rateCnt', '0');
                 $('form input').prop('disabled', false);

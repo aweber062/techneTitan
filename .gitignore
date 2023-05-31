@@ -1,5 +1,6 @@
 # .gitignore
 .env
+config.js
 error.log
 vendor/
 !script.js
