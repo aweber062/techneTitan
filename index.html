@@ -1,8 +1,11 @@
 <!DOCTYPE html>
-<html>
+<html xmlns="http://www.w3.org/1999/html">
 <head>
     <title>TechneTitan</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="script.js"></script>
+    <script src="encrypt.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -97,6 +100,20 @@
         #evilButton:hover {
             background-color: darkgreen;
         }
+
+        /* styling for the tokens */
+        .token-container {
+            background-color: #f2f2f2;
+            margin: 0;
+            border-radius: 5px;
+        }
+        .token-title{
+            font-weight: bold;
+            margin: 0;
+        }
+        .token-value{
+            font-size: 18px;
+        }
     </style>
 </head>
 <body>
@@ -107,8 +124,8 @@
     <h1>TechneTitan - 3.5</h1>
 </div>
 <hr>
-<span style="color: red; font-style: italic; font-size: large"><h5>Warning: You only have 10 requests per hour. Unless you know the hack around it :D</h5></span>
-<form method="POST" action="test.php">
+<span style="color: red; font-style: italic; font-size: large"><h5>Warning: You only have 10 requests. Unless you know the PIN around it :D</h5></span>
+<form>
     <label for="query">Enter your query: </label>
     <br>
     <input type="text" name="query" id="query" oninput="calculateTokens()" required>
@@ -186,9 +203,23 @@
         } // end of screaming at the user :p
     } // end of calculateTokens
 </script>
-<?php if ($generatedText !== ""): ?>
 <h2 id="g-text">Generated Text:</h2>
-<div id="output-text"><?php echo $generatedText; ?></div>
-<?php endif; ?>
+<div id="output-text"></div>
+<br><br>
+<!-- Display the token information -->
+<div class="token-container">
+    <div class="token-title"> Prompt Tokens:</div>
+    <div id="pTokens" class="token-value"></div>
+</div>
+<br>
+<div class="token-container">
+    <div class="token-title"> Completion Tokens:</div>
+    <div id="cTokens" class="token-value"></div>
+</div>
+<br>
+<div class="token-container">
+    <div class="token-title"> Total Tokens:</div>
+    <div id="tTokens" class="token-value"></div>
+</div>
 </body>
 </html>
