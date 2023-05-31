@@ -2,4 +2,4 @@
 .env
 error.log
 vendor/
-
+!script.js
