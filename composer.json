@@ -1,0 +1,7 @@
+{
+    "require": {
+        "smalot/pdfparser": "^2.5",
+        "ext-curl": "*",
+        "ext-json": "*"
+    }
+}
