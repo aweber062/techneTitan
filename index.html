@@ -1,11 +1,194 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>TechniTitan - 3.5</title>
+    <title>TechneTitan</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            margin: 20px;
+        }
+
+        h1 {
+            /* Put the Medxcel colors as a gradient for the title */
+            background-image: linear-gradient(to right, #5877a4, #a2b8d7, #002d62, #6a2c91, #5f6369, #ac2650, #e59f40, #04b14f);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 65px;
+            font-weight: bold;
+        }
+
+        hr {
+            border: none;
+            height: 3px;
+            background-color: black;
+            width: 665px;
+            margin: 0;
+        }
+
+        form {
+            margin-top: 20px;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        input[type="type"] {
+            width: 300px;
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            margin-bottom: 10px;
+        }
+
+        #logo {
+            width: 100px;
+            height: 100px;
+            overflow: hidden;
+        }
+
+        #logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        #container {
+            display: flex;
+            align-items: center;
+        }
+
+        #container img {
+            margin-right: 10px;
+        }
+
+        #output-text {
+            max-width: 665px;
+            word-wrap: break-word;
+            background-color: lightgreen;
+            border-color: black;
+            border-style: solid;
+
+        }
+
+        #breakingTheBudget {
+            max-width: 600px;
+            word-wrap: break-word;
+        }
+
+        #niceMessage {
+            max-width: 600px;
+            word-wrap: break-word;
+        }
+
+        #evilButton {
+            background-color: green;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        #evilButton:hover {
+            background-color: darkgreen;
+        }
+    </style>
 </head>
 <body>
-<h1>Test</h1>
+<div id="container">
+    <img id="logo" src="img/m_logo.png" alt="logo">
+    <!-- TechneTitan means  Powerful Craft-->
+    <!--- Pronouce: "TEK-nee-TYE-tan-->
+    <h1>TechneTitan - 3.5</h1>
+</div>
+<hr>
+<span style="color: red; font-style: italic; font-size: large"><h5>Warning: You only have 10 requests per hour. Unless you know the hack around it :D</h5></span>
+<form method="POST" action="test.php">
+    <label for="query">Enter your query: </label>
+    <br>
+    <input type="text" name="query" id="query" oninput="calculateTokens()" required>
+    <br><br>
+    <label for="title">Enter the title of your source (be detailed as possible): </label>
+    <br>
+    <input type="text" name="title" id="title" oninput="calculateTokens()" required>
+    <br><br>
+    <div style="color: lightskyblue; font-weight: bold; font-style: italic; width: 600px; word-wrap: break-word;">Please
+        be aware that the token counter just provides an estimate and may not be entirely accurate. The error margin is
+        +/- 15 tokens.
+    </div>
+    <br>
+    <div id="tokenCount" style="font-weight: bold;">Total Input-Token Cost: 0</div>
+    <!-- THE DIVs BELOW CORRELATE TO THE WARNING MESSAGES-->
+    <div id="breakingTheBudget" style="font-style: italic; font-size: x-large; color: red"></div>
+    <br>
+    <div id="niceMessage" style="font-style: normal; font-size: large; color: black"></div>
+    <br>
+    <!-- Happy face -->
+    <img id="face" src="img/medxcel_happy_face.png" alt="happy" style="display: none" width="600px">
+    <br><br>
+    <button id="evilButton" type="submit">Go</button>
+</form>
+<!-- AJAX AND JQUERY TO HANDLE TOKENS :p -->
+<script>
+    function countTokens(text) {
+        // tokenize the text using tokenization rules and patterns for the
+        // gpt-3.5-turbo model.
+        var pattern = /[^\p{L}\d\s]+|[\d]+(?:[.,][\d]+)?|\p{L}+/gu;
+        // ^ adjust pattern above if needs be
 
+        var tokens = text.split(pattern);
+        return tokens.length;
+    } // end of countTokens
+
+    function calculateTokens() {
+        var title = $("#title").val();
+        var query = $("#query").val();
+
+        var titleTokens = countTokens(title);
+        var queryTokens = countTokens(query);
+
+        // we know that the prompt is roughly 165-175, so we add 175 for the highest use case
+        var totalInputTokenCost = (titleTokens * 2) + queryTokens + 175;
+
+        // Clear out the extra 200 tokens :D
+        if (title === "" && query === "") {
+            totalInputTokenCost = 0; // reset the tokens
+        } // end of magic conditional statement.
+
+        // Ask Brandon what the MAX tokens should be.
+        if (totalInputTokenCost >= 215) {
+            $("#tokenCount").text("Total Input-Token Cost: " + totalInputTokenCost);
+
+            // Call show, then text.
+            $("#breakingTheBudget").show().text("Wow, wow, wow. Hold your horses, dear sir or madam! That is an astronomical number of tokens. Please take a moment to gather yourself and reconsider your token usage.");
+            $('#niceMessage').show().text("Please try to keep your tokens under [the predetermined amount: <?= $maxTokens ?> tokens ]. In order to prevent Medxcel from going out of business (or Alex's personal funds :D). Remember that tokens are calculated based on the total number of characters, including but not limited to the; Query, Title (of your source), and Whitespace. Thank you. Your (truly) happy associates at Medxcel! ");
+            // hide the evil button.
+            $('#face').show();
+            // Just hide everything if the token limit is hit.
+            $('#evilButton').hide(); // hide the submit button so users can't submit the high cost query.
+            $('#g-text').hide();
+            $('#output-text').hide();
+        } else {
+            $("#tokenCount").text("Total Input-Token Cost: " + totalInputTokenCost);
+            // Hide messages if the token limit has not been hit.
+            $('#breakingTheBudget').hide();
+            $('#niceMessage').hide();
+            $('#face').hide();
+            // submit button display :D and all other fields
+            $('#evilButton').show();
+            $('#g-text').show();
+            $('#output-text').show();
+        } // end of screaming at the user :p
+    } // end of calculateTokens
+</script>
+<?php if ($generatedText !== ""): ?>
+<h2 id="g-text">Generated Text:</h2>
+<div id="output-text"><?php echo $generatedText; ?></div>
+<?php endif; ?>
 </body>
 </html>

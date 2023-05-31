@@ -187,7 +187,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Access the returned data as needed
         // var_dump($responseData);
         $generatedText = $responseData['choices'][0]['message']['content'];
-        //echo "Generated Text: " . $generatedText;
+        echo "Generated Text: " . $generatedText;
     }
 
     // Close cURL
@@ -201,6 +201,7 @@ function handleError($message)
 }
 
 ?>
+<!--
 <!DOCTYPE html>
 <html>
 <head>
@@ -364,12 +365,12 @@ function handleError($message)
         } // end of magic conditional statement.
 
         // Ask Brandon what the MAX tokens should be.
-        if (totalInputTokenCost >= <?= $maxTokens ?>) {
+        if (totalInputTokenCost >= <?/*= $maxTokens */?>) {
             $("#tokenCount").text("Total Input-Token Cost: " + totalInputTokenCost);
 
             // Call show, then text.
             $("#breakingTheBudget").show().text("Wow, wow, wow. Hold your horses, dear sir or madam! That is an astronomical number of tokens. Please take a moment to gather yourself and reconsider your token usage.");
-            $('#niceMessage').show().text("Please try to keep your tokens under [the predetermined amount: <?= $maxTokens ?> tokens ]. In order to prevent Medxcel from going out of business (or Alex's personal funds :D). Remember that tokens are calculated based on the total number of characters, including but not limited to the; Query, Title (of your source), and Whitespace. Thank you. Your (truly) happy associates at Medxcel! ");
+            $('#niceMessage').show().text("Please try to keep your tokens under [the predetermined amount: <?/*= $maxTokens */?> tokens ]. In order to prevent Medxcel from going out of business (or Alex's personal funds :D). Remember that tokens are calculated based on the total number of characters, including but not limited to the; Query, Title (of your source), and Whitespace. Thank you. Your (truly) happy associates at Medxcel! ");
             // hide the evil button.
             $('#face').show();
             // Just hide everything if the token limit is hit.
@@ -389,9 +390,10 @@ function handleError($message)
         } // end of screaming at the user :p
     } // end of calculateTokens
 </script>
-<?php if ($generatedText !== ""): ?>
+<?php /*if ($generatedText !== ""): */?>
     <h2 id="g-text">Generated Text:</h2>
-    <div id="output-text"><?php echo $generatedText; ?></div>
-<?php endif; ?>
+    <div id="output-text"><?php /*echo $generatedText; */?></div>
+<?php /*endif; */?>
 </body>
 </html>
+-->
